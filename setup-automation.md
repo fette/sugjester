@@ -5,18 +5,21 @@ This guide will help you set up automatic export of your book consideration list
 ## Prerequisites
 
 - OmniFocus 3 for Mac
-- Your book lists organized with specific tags in OmniFocus
+- Your book lists organized in the specific OmniFocus projects 
 - macOS with Terminal access
 
-## Step 1: Organize Your OmniFocus Tags
+## Step 1: Verify Your OmniFocus Projects
 
-Make sure your potential books are tagged in OmniFocus with one of these tag names:
-- `Books-English` (for English language books)
-- `Books-Japanese` (for Japanese language books)
+The export script is configured to work with these specific OmniFocus projects:
 
-Alternative tag names that the script will also check:
-- `English Books`
-- `Japanese Books`
+- **Books to consider** (`omnifocus:///project/aCuCB0X3CYn`)
+- **Books owned to read** (`omnifocus:///project/gipgWMqDMdb`)  
+- **Japanese books to consider** (`omnifocus:///project/bPvbY14zt9G`)
+
+The script will:
+- Combine "Books to consider" and "Books owned to read" into a single English export
+- Export "Japanese books to consider" separately
+- Only export incomplete tasks (completed books are ignored)
 
 **Pro Tip:** You can use ⭐️ or `@high-priority` in task names to mark high-priority books.
 
@@ -85,9 +88,10 @@ To run the export automatically every day at 9 AM:
 - Check that the file isn't quarantined: `xattr -d com.apple.quarantine omnifocus-export.omnifocusjs`
 
 ### No Books Exported
-- Verify your tag names match what's expected
+- Verify the project IDs are correct and projects exist in your OmniFocus
 - Check that tasks are not completed (completed tasks are excluded)
 - Look at the export summary for details
+- Ensure the projects contain actual tasks, not just empty projects
 
 ### Automation Not Running
 - Check if the launchd service is loaded: `launchctl list | grep sugjester`
@@ -109,8 +113,8 @@ Edit the `com.sugjester.omnifocus-export.plist` file and modify the `StartCalend
 </dict>
 ```
 
-### Adding More Tag Names
-Edit the `omnifocus-export.omnifocusjs` file and modify the tag names in the export functions.
+### Changing Project IDs
+If your project IDs are different, edit the `omnifocus-export.omnifocusjs` file and update the `projectIds` object with your actual project IDs. You can find project IDs by right-clicking a project in OmniFocus and selecting "Copy as Link".
 
 ### Changing Output Format
 The JSON structure can be customized in the export script to match your specific needs.

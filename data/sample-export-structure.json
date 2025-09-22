@@ -2,6 +2,10 @@
   "language": "english",
   "exportDate": "2024-01-15T09:00:00.000Z",
   "totalBooks": 12,
+  "sourceProjects": [
+    { "name": "Books to consider", "id": "omnifocus:///project/aCuCB0X3CYn" },
+    { "name": "Books owned to read", "id": "omnifocus:///project/gipgWMqDMdb" }
+  ],
   "buckets": {
     "Science Fiction": [
       {
@@ -11,9 +15,10 @@
         "priority": "high",
         "dateAdded": "2024-01-10T14:30:00.000Z",
         "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
-        "tags": ["Books-English", "Science Fiction", "Ishiguro"],
+        "tags": ["Science Fiction", "Ishiguro"],
         "deferDate": null,
-        "dueDate": null
+        "dueDate": null,
+        "projectId": "omnifocus:///project/aCuCB0X3CYn"
       },
       {
         "title": "Project Hail Mary ⭐️",
@@ -22,9 +27,10 @@
         "priority": "high", 
         "dateAdded": "2024-01-08T10:15:00.000Z",
         "notes": "Andy Weir - highly recommended by multiple sources",
-        "tags": ["Books-English", "Science Fiction"],
+        "tags": ["Science Fiction"],
         "deferDate": null,
-        "dueDate": "2024-02-01T00:00:00.000Z"
+        "dueDate": "2024-02-01T00:00:00.000Z",
+        "projectId": "omnifocus:///project/gipgWMqDMdb"
       }
     ],
     "Philosophy & Science": [
@@ -35,9 +41,10 @@
         "priority": "normal",
         "dateAdded": "2024-01-05T16:45:00.000Z",
         "notes": "David Chalmers on consciousness - fits with Hofstadter interests",
-        "tags": ["Books-English", "Philosophy", "Consciousness"],
+        "tags": ["Philosophy", "Consciousness"],
         "deferDate": "2024-02-15T00:00:00.000Z",
-        "dueDate": null
+        "dueDate": null,
+        "projectId": "omnifocus:///project/aCuCB0X3CYn"
       }
     ],
     "History": [
@@ -48,9 +55,10 @@
         "priority": "normal",
         "dateAdded": "2024-01-12T11:20:00.000Z",
         "notes": "Graeber & Wengrow - new perspectives on human history",
-        "tags": ["Books-English", "History", "Anthropology"],
+        "tags": ["History", "Anthropology"],
         "deferDate": null,
-        "dueDate": null
+        "dueDate": null,
+        "projectId": "omnifocus:///project/aCuCB0X3CYn"
       }
     ]
   },
@@ -62,9 +70,10 @@
       "priority": "high",
       "dateAdded": "2024-01-10T14:30:00.000Z",
       "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
-      "tags": ["Books-English", "Science Fiction", "Ishiguro"],
+      "tags": ["Science Fiction", "Ishiguro"],
       "deferDate": null,
-      "dueDate": null
+      "dueDate": null,
+      "projectId": "omnifocus:///project/aCuCB0X3CYn"
     }
   ]
 }

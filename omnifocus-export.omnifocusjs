@@ -23,19 +23,31 @@
                 fileManager.createDirectory(outputDir);
             }
             
-            // Function to export books by language tag
-            function exportBooksByLanguage(languageTag, filename) {
-                const tag = flattenedTags.byName(languageTag);
-                if (!tag) {
-                    console.log(`Warning: Tag '${languageTag}' not found`);
-                    return [];
+            // Function to export books by project ID
+            function exportBooksByProject(projectId, projectName, filename, language) {
+                let project;
+                try {
+                    // Parse the project ID from the omnifocus:/// URL
+                    const idMatch = projectId.match(/project\/([^\/]+)/);
+                    if (!idMatch) {
+                        console.log(`Warning: Invalid project ID format: ${projectId}`);
+                        return { language: language, count: 0, filePath: "" };
+                    }
+                    
+                    const id = idMatch[1];
+                    project = flattenedProjects.byIdentifier(id);
+                    
+                    if (!project) {
+                        console.log(`Warning: Project with ID '${id}' not found`);
+                        return { language: language, count: 0, filePath: "" };
+                    }
+                } catch (error) {
+                    console.log(`Error finding project: ${error.message}`);
+                    return { language: language, count: 0, filePath: "" };
                 }
                 
-                const tasks = tag.tasks.filter(task => !task.completed);
+                const tasks = project.task.flattenedTasks.filter(task => !task.completed);
                 const bookData = tasks.map(task => {
-                    // Get project context for better organization
-                    let projectName = task.containingProject ? task.containingProject.name : "Inbox";
-                    
                     // Extract additional metadata from task notes or tags
                     let priority = "normal";
                     let bucketName = projectName;
@@ -60,7 +72,8 @@
                         notes: task.note || "",
                         tags: task.tags.map(t => t.name),
                         deferDate: task.deferDate ? task.deferDate.toISOString() : null,
-                        dueDate: task.dueDate ? task.dueDate.toISOString() : null
+                        dueDate: task.dueDate ? task.dueDate.toISOString() : null,
+                        projectId: projectId
                     };
                 });
                 
@@ -74,11 +87,15 @@
                 });
                 
                 const exportData = {
-                    language: languageTag.toLowerCase().includes('japanese') ? 'japanese' : 'english',
+                    language: language,
                     exportDate: new Date().toISOString(),
                     totalBooks: bookData.length,
                     buckets: groupedData,
-                    flatList: bookData
+                    flatList: bookData,
+                    sourceProject: {
+                        name: projectName,
+                        id: projectId
+                    }
                 };
                 
                 // Write to file
@@ -92,29 +109,103 @@
                 };
             }
             
-            // Export both English and Japanese lists
-            // Adjust these tag names to match your actual OmniFocus tags
-            const englishResult = exportBooksByLanguage("Books-English", "english-books-to-consider.json");
-            const japaneseResult = exportBooksByLanguage("Books-Japanese", "japanese-books-to-consider.json");
+            // Export from specific OmniFocus projects
+            const projectIds = {
+                booksToConsider: "omnifocus:///project/aCuCB0X3CYn",
+                booksOwnedToRead: "omnifocus:///project/gipgWMqDMdb", 
+                japaneseBooksToConsider: "omnifocus:///project/bPvbY14zt9G"
+            };
             
-            // Also try common alternative tag names if the above don't exist
-            let englishFallback = null;
-            let japaneseFallback = null;
+            // Export individual projects first
+            const booksToConsiderResult = exportBooksByProject(
+                projectIds.booksToConsider,
+                "Books to consider", 
+                "books-to-consider.json",
+                "english"
+            );
             
-            if (englishResult.count === 0) {
-                englishFallback = exportBooksByLanguage("English Books", "english-books-to-consider.json");
-            }
+            const booksOwnedResult = exportBooksByProject(
+                projectIds.booksOwnedToRead,
+                "Books owned to read",
+                "books-owned-to-read.json", 
+                "english"
+            );
             
-            if (japaneseResult.count === 0) {
-                japaneseFallback = exportBooksByLanguage("Japanese Books", "japanese-books-to-consider.json");
+            const japaneseResult = exportBooksByProject(
+                projectIds.japaneseBooksToConsider,
+                "Japanese books to consider",
+                "japanese-books-to-consider.json",
+                "japanese"
+            );
+            
+            // Combine English projects into single export
+            let combinedEnglishBooks = [];
+            let englishBuckets = {};
+            
+            // Read the individual files and combine them
+            try {
+                if (booksToConsiderResult.count > 0) {
+                    const considerData = JSON.parse(fileManager.readString(outputDir + "books-to-consider.json"));
+                    combinedEnglishBooks = combinedEnglishBooks.concat(considerData.flatList);
+                    Object.assign(englishBuckets, considerData.buckets);
+                }
+                
+                if (booksOwnedResult.count > 0) {
+                    const ownedData = JSON.parse(fileManager.readString(outputDir + "books-owned-to-read.json"));
+                    combinedEnglishBooks = combinedEnglishBooks.concat(ownedData.flatList);
+                    Object.assign(englishBuckets, ownedData.buckets);
+                }
+                
+                // Create combined English export
+                const combinedEnglishData = {
+                    language: "english",
+                    exportDate: new Date().toISOString(),
+                    totalBooks: combinedEnglishBooks.length,
+                    buckets: englishBuckets,
+                    flatList: combinedEnglishBooks,
+                    sourceProjects: [
+                        { name: "Books to consider", id: projectIds.booksToConsider },
+                        { name: "Books owned to read", id: projectIds.booksOwnedToRead }
+                    ]
+                };
+                
+                fileManager.writeString(outputDir + "english-books-to-consider.json", 
+                                      JSON.stringify(combinedEnglishData, null, 2));
+                                      
+                // Clean up individual files
+                if (fileManager.fileExists(outputDir + "books-to-consider.json")) {
+                    fileManager.deleteItem(outputDir + "books-to-consider.json");
+                }
+                if (fileManager.fileExists(outputDir + "books-owned-to-read.json")) {
+                    fileManager.deleteItem(outputDir + "books-owned-to-read.json");
+                }
+                
+                var englishResult = {
+                    language: "english",
+                    count: combinedEnglishBooks.length,
+                    filePath: outputDir + "english-books-to-consider.json"
+                };
+                
+            } catch (error) {
+                console.error("Error combining English projects:", error);
+                var englishResult = {
+                    language: "english", 
+                    count: 0,
+                    filePath: ""
+                };
             }
             
             // Create summary report
             const summary = {
                 exportDate: new Date().toISOString(),
                 results: {
-                    english: englishFallback || englishResult,
-                    japanese: japaneseFallback || japaneseResult
+                    english: englishResult,
+                    japanese: japaneseResult
+                },
+                sourceProjects: {
+                    "Books to consider": projectIds.booksToConsider,
+                    "Books owned to read": projectIds.booksOwnedToRead,
+                    "Japanese books to consider": projectIds.japaneseBooksToConsider
                 }
             };
             
