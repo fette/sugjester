@@ -1,0 +1,145 @@
+/*{
+    "type": "action",
+    "targets": ["omnifocus"],
+    "author": "William's Sugjester",
+    "identifier": "com.sugjester.export-books",
+    "version": "1.0",
+    "description": "Exports English and Japanese book consideration lists to JSON for Sugjester",
+    "label": "Export Books for Sugjester",
+    "shortLabel": "Export Books",
+    "paletteLabel": "Export Books",
+    "image": "books.vertical"
+}*/
+
+(() => {
+    const action = new PlugIn.Action(async function(selection, sender){
+        try {
+            // Define the output directory - adjust this path as needed
+            const outputDir = "/Users/fet/source/sugjester/data/";
+            
+            // Create the data directory if it doesn't exist
+            const fileManager = FileManager.local;
+            if (!fileManager.directoryExists(outputDir)) {
+                fileManager.createDirectory(outputDir);
+            }
+            
+            // Function to export books by language tag
+            function exportBooksByLanguage(languageTag, filename) {
+                const tag = flattenedTags.byName(languageTag);
+                if (!tag) {
+                    console.log(`Warning: Tag '${languageTag}' not found`);
+                    return [];
+                }
+                
+                const tasks = tag.tasks.filter(task => !task.completed);
+                const bookData = tasks.map(task => {
+                    // Get project context for better organization
+                    let projectName = task.containingProject ? task.containingProject.name : "Inbox";
+                    
+                    // Extract additional metadata from task notes or tags
+                    let priority = "normal";
+                    let bucketName = projectName;
+                    
+                    // Check for high-priority markers
+                    if (task.name.includes("⭐️") || task.name.includes("@high-priority")) {
+                        priority = "high";
+                    }
+                    
+                    // Clean up task name (remove priority markers)
+                    let cleanName = task.name
+                        .replace(/⭐️/g, '')
+                        .replace(/@high-priority/g, '')
+                        .trim();
+                    
+                    return {
+                        title: cleanName,
+                        project: projectName,
+                        bucket: bucketName,
+                        priority: priority,
+                        dateAdded: task.added.toISOString(),
+                        notes: task.note || "",
+                        tags: task.tags.map(t => t.name),
+                        deferDate: task.deferDate ? task.deferDate.toISOString() : null,
+                        dueDate: task.dueDate ? task.dueDate.toISOString() : null
+                    };
+                });
+                
+                // Group by bucket/project for better organization
+                const groupedData = {};
+                bookData.forEach(book => {
+                    if (!groupedData[book.bucket]) {
+                        groupedData[book.bucket] = [];
+                    }
+                    groupedData[book.bucket].push(book);
+                });
+                
+                const exportData = {
+                    language: languageTag.toLowerCase().includes('japanese') ? 'japanese' : 'english',
+                    exportDate: new Date().toISOString(),
+                    totalBooks: bookData.length,
+                    buckets: groupedData,
+                    flatList: bookData
+                };
+                
+                // Write to file
+                const filePath = outputDir + filename;
+                fileManager.writeString(filePath, JSON.stringify(exportData, null, 2));
+                
+                return {
+                    language: exportData.language,
+                    count: bookData.length,
+                    filePath: filePath
+                };
+            }
+            
+            // Export both English and Japanese lists
+            // Adjust these tag names to match your actual OmniFocus tags
+            const englishResult = exportBooksByLanguage("Books-English", "english-books-to-consider.json");
+            const japaneseResult = exportBooksByLanguage("Books-Japanese", "japanese-books-to-consider.json");
+            
+            // Also try common alternative tag names if the above don't exist
+            let englishFallback = null;
+            let japaneseFallback = null;
+            
+            if (englishResult.count === 0) {
+                englishFallback = exportBooksByLanguage("English Books", "english-books-to-consider.json");
+            }
+            
+            if (japaneseResult.count === 0) {
+                japaneseFallback = exportBooksByLanguage("Japanese Books", "japanese-books-to-consider.json");
+            }
+            
+            // Create summary report
+            const summary = {
+                exportDate: new Date().toISOString(),
+                results: {
+                    english: englishFallback || englishResult,
+                    japanese: japaneseFallback || japaneseResult
+                }
+            };
+            
+            const summaryPath = outputDir + "export-summary.json";
+            fileManager.writeString(summaryPath, JSON.stringify(summary, null, 2));
+            
+            // Show results to user
+            const totalBooks = summary.results.english.count + summary.results.japanese.count;
+            const alertMsg = `Export Complete!\n\n` +
+                           `English books: ${summary.results.english.count}\n` +
+                           `Japanese books: ${summary.results.japanese.count}\n` +
+                           `Total: ${totalBooks} books\n\n` +
+                           `Files saved to:\n${outputDir}`;
+            
+            new Alert("Sugjester Export", alertMsg).show();
+            
+        } catch (error) {
+            new Alert("Export Error", `Failed to export books: ${error.message}`).show();
+            console.error("Export error:", error);
+        }
+    });
+
+    action.validate = function(selection, sender){
+        return true;
+    };
+
+    return action;
+})();

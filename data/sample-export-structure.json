@@ -1,0 +1,70 @@
+{
+  "language": "english",
+  "exportDate": "2024-01-15T09:00:00.000Z",
+  "totalBooks": 12,
+  "buckets": {
+    "Science Fiction": [
+      {
+        "title": "Klara and the Sun",
+        "project": "Science Fiction",
+        "bucket": "Science Fiction", 
+        "priority": "high",
+        "dateAdded": "2024-01-10T14:30:00.000Z",
+        "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
+        "tags": ["Books-English", "Science Fiction", "Ishiguro"],
+        "deferDate": null,
+        "dueDate": null
+      },
+      {
+        "title": "Project Hail Mary ⭐️",
+        "project": "Science Fiction",
+        "bucket": "Science Fiction",
+        "priority": "high", 
+        "dateAdded": "2024-01-08T10:15:00.000Z",
+        "notes": "Andy Weir - highly recommended by multiple sources",
+        "tags": ["Books-English", "Science Fiction"],
+        "deferDate": null,
+        "dueDate": "2024-02-01T00:00:00.000Z"
+      }
+    ],
+    "Philosophy & Science": [
+      {
+        "title": "The Conscious Mind",
+        "project": "Philosophy & Science",
+        "bucket": "Philosophy & Science",
+        "priority": "normal",
+        "dateAdded": "2024-01-05T16:45:00.000Z",
+        "notes": "David Chalmers on consciousness - fits with Hofstadter interests",
+        "tags": ["Books-English", "Philosophy", "Consciousness"],
+        "deferDate": "2024-02-15T00:00:00.000Z",
+        "dueDate": null
+      }
+    ],
+    "History": [
+      {
+        "title": "The Dawn of Everything",
+        "project": "History",
+        "bucket": "History",
+        "priority": "normal",
+        "dateAdded": "2024-01-12T11:20:00.000Z",
+        "notes": "Graeber & Wengrow - new perspectives on human history",
+        "tags": ["Books-English", "History", "Anthropology"],
+        "deferDate": null,
+        "dueDate": null
+      }
+    ]
+  },
+  "flatList": [
+    {
+      "title": "Klara and the Sun",
+      "project": "Science Fiction",
+      "bucket": "Science Fiction",
+      "priority": "high",
+      "dateAdded": "2024-01-10T14:30:00.000Z",
+      "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
+      "tags": ["Books-English", "Science Fiction", "Ishiguro"],
+      "deferDate": null,
+      "dueDate": null
+    }
+  ]
+}

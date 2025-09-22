@@ -37,8 +37,10 @@ temp/
 .env.local
 .env.*.local
 
-# Data files that might contain personal info
-data/
+# Data files that might contain personal info - exclude actual exports but keep structure
+data/*.json
+!data/sample-export-structure.json
+data/*.log
 exports/
 *.json.bak
 *.csv.bak
