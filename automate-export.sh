@@ -22,27 +22,12 @@ log "Starting Sugjester book export automation..."
 # Check if OmniFocus is running
 if ! pgrep -x "OmniFocus" > /dev/null; then
     log "OmniFocus is not running. Attempting to launch..."
-    open -a "OmniFocus 4"
+    open -a "OmniFocus"
     sleep 5
 fi
 
-# Trigger the OmniFocus automation using AppleScript
-# This will execute our Omni Automation plugin
-osascript << 'EOF'
-tell application "OmniFocus 4"
-    activate
-    tell front document
-        -- Execute our custom export action
-        -- Note: The actual command will depend on how the plugin is registered
-        try
-            execute action "Export Books for Sugjester"
-        on error errMsg
-            display alert "Export Error" message errMsg
-        end try
-    end tell
-end tell
-EOF
-
+# Run the AppleScript-based book export
+"$SCRIPT_DIR/export-books.sh"
 export_result=$?
 
 if [ $export_result -eq 0 ]; then

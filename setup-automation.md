@@ -23,35 +23,25 @@ The script will:
 
 **Pro Tip:** You can use ⭐️ or `@high-priority` in task names to mark high-priority books.
 
-## Step 2: Install the OmniFocus Plugin
+## Step 2: Test Manual Export
 
-1. **Copy the plugin file:**
+No installation required! The new system uses AppleScript directly.
+
+1. **Run the export script:**
    ```bash
-   cp omnifocus-export.omnifocusjs ~/Library/Application\ Scripts/com.omnigroup.OmniFocus4/Plug-Ins/
+   ./export-books.sh
    ```
 
-   If the directory doesn't exist, create it:
-   ```bash
-   mkdir -p ~/Library/Application\ Scripts/com.omnigroup.OmniFocus4/Plug-Ins/
-   ```
-
-2. **Restart OmniFocus** to load the new plugin
-
-3. **Verify installation:**
-   - Open OmniFocus
-   - Go to **Automation** menu
-   - You should see "Export Books for Sugjester" in the list
-
-## Step 3: Test Manual Export
-
-1. In OmniFocus, go to **Automation → Export Books for Sugjester**
-2. The script will create JSON files in the `data/` directory
-3. Check that the following files were created:
+2. **Check the exported files:**
    - `data/english-books-to-consider.json`
    - `data/japanese-books-to-consider.json`
    - `data/export-summary.json`
 
-## Step 4: Set Up Automated Scheduling (Optional)
+3. **View the results:**
+   - The script will show a summary of exported books
+   - Check the log file: `data/export.log`
+
+## Step 3: Set Up Automated Scheduling (Optional)
 
 To run the export automatically every day at 9 AM:
 
@@ -74,7 +64,7 @@ To run the export automatically every day at 9 AM:
    launchctl start com.sugjester.omnifocus-export
    ```
 
-## Step 5: Verify Automation
+## Step 4: Verify Automation
 
 - Check the log file: `data/export.log`
 - The automation will run daily and commit changes to git if this is a git repository
@@ -82,10 +72,9 @@ To run the export automatically every day at 9 AM:
 
 ## Troubleshooting
 
-### Plugin Not Appearing
-- Ensure the file is in the correct directory with `.omnifocusjs` extension
-- Restart OmniFocus completely
-- Check that the file isn't quarantined: `xattr -d com.apple.quarantine omnifocus-export.omnifocusjs`
+### Script Permissions
+- Make sure the scripts are executable: `chmod +x export-books.sh export-books.applescript`
+- If you get permission errors, you may need to allow the scripts in System Preferences → Security & Privacy
 
 ### No Books Exported
 - Verify the project IDs are correct and projects exist in your OmniFocus
@@ -114,7 +103,7 @@ Edit the `com.sugjester.omnifocus-export.plist` file and modify the `StartCalend
 ```
 
 ### Changing Project IDs
-If your project IDs are different, edit the `omnifocus-export.omnifocusjs` file and update the `projectIds` object with your actual project IDs. You can find project IDs by right-clicking a project in OmniFocus and selecting "Copy as Link".
+If your project IDs are different, edit the `export-books.applescript` file and update the project ID variables at the top of the script. You can find project IDs by right-clicking a project in OmniFocus and selecting "Copy as Link".
 
 ### Changing Output Format
 The JSON structure can be customized in the export script to match your specific needs.
@@ -129,7 +118,8 @@ sugjester/
 │   ├── japanese-books-to-consider.json
 │   ├── export-summary.json
 │   └── export.log
-├── omnifocus-export.omnifocusjs
+├── export-books.applescript
+├── export-books.sh
 ├── automate-export.sh
 └── setup-automation.md (this file)
 ```
