@@ -4,7 +4,7 @@ This guide will help you set up automatic export of your book consideration list
 
 ## Prerequisites
 
-- OmniFocus 3 for Mac
+- OmniFocus 4 for Mac
 - Your book lists organized in the specific OmniFocus projects 
 - macOS with Terminal access
 
@@ -27,12 +27,12 @@ The script will:
 
 1. **Copy the plugin file:**
    ```bash
-   cp omnifocus-export.omnifocusjs ~/Library/Application\ Scripts/com.omnigroup.OmniFocus3/Plug-Ins/
+   cp omnifocus-export.omnifocusjs ~/Library/Application\ Scripts/com.omnigroup.OmniFocus4/Plug-Ins/
    ```
 
    If the directory doesn't exist, create it:
    ```bash
-   mkdir -p ~/Library/Application\ Scripts/com.omnigroup.OmniFocus3/Plug-Ins/
+   mkdir -p ~/Library/Application\ Scripts/com.omnigroup.OmniFocus4/Plug-Ins/
    ```
 
 2. **Restart OmniFocus** to load the new plugin

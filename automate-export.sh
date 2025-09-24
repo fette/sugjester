@@ -22,14 +22,14 @@ log "Starting Sugjester book export automation..."
 # Check if OmniFocus is running
 if ! pgrep -x "OmniFocus" > /dev/null; then
     log "OmniFocus is not running. Attempting to launch..."
-    open -a "OmniFocus 3"
+    open -a "OmniFocus 4"
     sleep 5
 fi
 
 # Trigger the OmniFocus automation using AppleScript
 # This will execute our Omni Automation plugin
 osascript << 'EOF'
-tell application "OmniFocus 3"
+tell application "OmniFocus 4"
     activate
     tell front document
         -- Execute our custom export action
