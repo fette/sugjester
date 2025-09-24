@@ -1,79 +1,45 @@
 {
   "language": "english",
-  "exportDate": "2024-01-15T09:00:00.000Z",
-  "totalBooks": 12,
+  "exportDate": "2025-01-15T10:30:00.000Z",
+  "totalBooks": 42,
   "sourceProjects": [
-    { "name": "Books to consider", "id": "omnifocus:///project/aCuCB0X3CYn" },
-    { "name": "Books owned to read", "id": "omnifocus:///project/gipgWMqDMdb" }
+    {
+      "name": "Books to consider",
+      "id": "omnifocus:///project/aCuCB0X3CYn"
+    },
+    {
+      "name": "Books owned to read", 
+      "id": "omnifocus:///project/gipgWMqDMdb"
+    }
   ],
   "buckets": {
-    "Science Fiction": [
+    "Books to consider": [
       {
-        "title": "Klara and the Sun",
-        "project": "Science Fiction",
-        "bucket": "Science Fiction", 
-        "priority": "high",
-        "dateAdded": "2024-01-10T14:30:00.000Z",
-        "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
-        "tags": ["Science Fiction", "Ishiguro"],
+        "title": "The Culture series by Iain M. Banks",
+        "project": "Books to consider", 
+        "bucket": "Books to consider",
+        "priority": "normal",
+        "dateAdded": "2024-12-15T14:23:00.000Z",
+        "notes": "Robin Sloan recommendation",
+        "tags": [],
         "deferDate": null,
         "dueDate": null,
         "projectId": "omnifocus:///project/aCuCB0X3CYn"
-      },
+      }
+    ],
+    "Books owned to read": [
       {
-        "title": "Project Hail Mary ⭐️",
-        "project": "Science Fiction",
-        "bucket": "Science Fiction",
-        "priority": "high", 
-        "dateAdded": "2024-01-08T10:15:00.000Z",
-        "notes": "Andy Weir - highly recommended by multiple sources",
-        "tags": ["Science Fiction"],
+        "title": "SPQR: A History of Ancient Rome",
+        "project": "Books owned to read",
+        "bucket": "Books owned to read", 
+        "priority": "normal",
+        "dateAdded": "2024-11-20T09:15:00.000Z",
+        "notes": "Already purchased",
+        "tags": [],
         "deferDate": null,
-        "dueDate": "2024-02-01T00:00:00.000Z",
+        "dueDate": null,
         "projectId": "omnifocus:///project/gipgWMqDMdb"
       }
-    ],
-    "Philosophy & Science": [
-      {
-        "title": "The Conscious Mind",
-        "project": "Philosophy & Science",
-        "bucket": "Philosophy & Science",
-        "priority": "normal",
-        "dateAdded": "2024-01-05T16:45:00.000Z",
-        "notes": "David Chalmers on consciousness - fits with Hofstadter interests",
-        "tags": ["Philosophy", "Consciousness"],
-        "deferDate": "2024-02-15T00:00:00.000Z",
-        "dueDate": null,
-        "projectId": "omnifocus:///project/aCuCB0X3CYn"
-      }
-    ],
-    "History": [
-      {
-        "title": "The Dawn of Everything",
-        "project": "History",
-        "bucket": "History",
-        "priority": "normal",
-        "dateAdded": "2024-01-12T11:20:00.000Z",
-        "notes": "Graeber & Wengrow - new perspectives on human history",
-        "tags": ["History", "Anthropology"],
-        "deferDate": null,
-        "dueDate": null,
-        "projectId": "omnifocus:///project/aCuCB0X3CYn"
-      }
     ]
-  },
-  "flatList": [
-    {
-      "title": "Klara and the Sun",
-      "project": "Science Fiction",
-      "bucket": "Science Fiction",
-      "priority": "high",
-      "dateAdded": "2024-01-10T14:30:00.000Z",
-      "notes": "Kazuo Ishiguro's latest - AI perspective narrative",
-      "tags": ["Science Fiction", "Ishiguro"],
-      "deferDate": null,
-      "dueDate": null,
-      "projectId": "omnifocus:///project/aCuCB0X3CYn"
-    }
-  ]
+  }
 }
