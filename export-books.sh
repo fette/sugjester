@@ -162,9 +162,11 @@ EOF
         esac
     done <<< "$raw_data"
     
-    # Generate English export
-    if [[ ${#english_books[@]} -gt 0 ]]; then
-        # Group books by bucket
+    # Generate unified export with all books
+    local total_books=$((${#english_books[@]} + ${#japanese_books[@]}))
+    
+    if [[ $total_books -gt 0 ]]; then
+        # Group English books by bucket
         local books_to_consider=""
         local books_owned=""
         local first_consider=true
@@ -185,69 +187,48 @@ EOF
                 first_owned=false
             fi
         done
-
-        # Create English JSON structure
-        cat > "$DATA_DIR/english-books-to-consider.json" << EOF
-{
-  "language": "english",
-  "exportDate": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)",
-  "totalBooks": ${#english_books[@]},
-  "sourceProjects": [
-    { "name": "Books to consider", "id": "omnifocus:///project/aCuCB0X3CYn" },
-    { "name": "Books owned to read", "id": "omnifocus:///project/gipgWMqDMdb" }
-  ],
-  "buckets": {
-    "Books to consider": [$books_to_consider],
-    "Books owned to read": [$books_owned]
-  }
-}
-EOF
-        log "Generated English export with ${#english_books[@]} books"
-    fi
-    
-    # Generate Japanese export
-    if [[ ${#japanese_books[@]} -gt 0 ]]; then
+        
+        # Group Japanese books
         local japanese_books_list=""
-        local first=true
+        local first_japanese=true
         for book in "${japanese_books[@]}"; do
-            if [[ "$first" == false ]]; then
+            if [[ "$first_japanese" == false ]]; then
                 japanese_books_list="$japanese_books_list, "
             fi
             japanese_books_list="$japanese_books_list$book"
-            first=false
+            first_japanese=false
         done
-        
-        # Create Japanese JSON structure
-        cat > "$DATA_DIR/japanese-books-to-consider.json" << EOF
+
+        # Create unified JSON structure
+        cat > "$DATA_DIR/books-to-consider.json" << EOF
 {
-  "language": "japanese",
   "exportDate": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)",
-  "totalBooks": ${#japanese_books[@]},
+  "totalBooks": $total_books,
   "sourceProjects": [
+    { "name": "Books to consider", "id": "omnifocus:///project/aCuCB0X3CYn" },
+    { "name": "Books owned to read", "id": "omnifocus:///project/gipgWMqDMdb" },
     { "name": "Japanese books to consider", "id": "omnifocus:///project/bPvbY14zt9G" }
   ],
   "buckets": {
+    "Books to consider": [$books_to_consider],
+    "Books owned to read": [$books_owned],
     "Japanese books to consider": [$japanese_books_list]
   }
 }
 EOF
-        log "Generated Japanese export with ${#japanese_books[@]} books"
+        log "Generated unified export with $total_books books (${#english_books[@]} English, ${#japanese_books[@]} Japanese)"
     fi
     
     # Generate summary
     cat > "$DATA_DIR/export-summary.json" << EOF
 {
   "exportDate": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)",
-  "results": {
-    "english": {
-      "language": "english",
-      "count": ${#english_books[@]},
-      "filePath": "$DATA_DIR/english-books-to-consider.json"
-    },
-    "japanese": {
-      "language": "japanese", 
-      "count": ${#japanese_books[@]},
-      "filePath": "$DATA_DIR/japanese-books-to-consider.json"
+  "unified": {
+    "totalBooks": $total_books,
+    "filePath": "$DATA_DIR/books-to-consider.json",
+    "languages": {
+      "english": ${#english_books[@]},
+      "japanese": ${#japanese_books[@]}
     }
   },
   "sourceProjects": {
@@ -258,7 +239,7 @@ EOF
 }
 EOF
     
-    log "Export summary: ${#english_books[@]} English, ${#japanese_books[@]} Japanese books"
+    log "Export summary: $total_books total books (${#english_books[@]} English, ${#japanese_books[@]} Japanese)"
 }
 
 # Main execution

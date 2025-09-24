@@ -1,7 +1,6 @@
 {
-  "language": "english",
   "exportDate": "2025-01-15T10:30:00.000Z",
-  "totalBooks": 42,
+  "totalBooks": 73,
   "sourceProjects": [
     {
       "name": "Books to consider",
@@ -10,6 +9,10 @@
     {
       "name": "Books owned to read", 
       "id": "omnifocus:///project/gipgWMqDMdb"
+    },
+    {
+      "name": "Japanese books to consider", 
+      "id": "omnifocus:///project/bPvbY14zt9G"
     }
   ],
   "buckets": {
@@ -39,6 +42,20 @@
         "deferDate": null,
         "dueDate": null,
         "projectId": "omnifocus:///project/gipgWMqDMdb"
+      }
+    ],
+    "Japanese books to consider": [
+      {
+        "title": "五番目のサリー",
+        "project": "Japanese books to consider",
+        "bucket": "Japanese books to consider",
+        "priority": "normal",
+        "dateAdded": "2024-10-05T16:45:00.000Z",
+        "notes": "村上春樹の新作",
+        "tags": [],
+        "deferDate": null,
+        "dueDate": null,
+        "projectId": "omnifocus:///project/bPvbY14zt9G"
       }
     ]
   }
