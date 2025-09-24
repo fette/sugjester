@@ -164,30 +164,20 @@ EOF
     
     # Generate English export
     if [[ ${#english_books[@]} -gt 0 ]]; then
-        local english_flat_list=""
-        local first=true
-        for book in "${english_books[@]}"; do
-            if [[ "$first" == false ]]; then
-                english_flat_list="$english_flat_list, "
-            fi
-            english_flat_list="$english_flat_list$book"
-            first=false
-        done
-        
-        # Group books by bucket for better organization  
+        # Group books by bucket
         local books_to_consider=""
         local books_owned=""
         local first_consider=true
         local first_owned=true
         
         for book in "${english_books[@]}"; do
-            if echo "$book" | grep -q '"Books to consider"'; then
+            if echo "$book" | grep -q '"project": "Books to consider"'; then
                 if [[ "$first_consider" == false ]]; then
                     books_to_consider="$books_to_consider, "
                 fi
                 books_to_consider="$books_to_consider$book"
                 first_consider=false
-            elif echo "$book" | grep -q '"Books owned to read"'; then
+            elif echo "$book" | grep -q '"project": "Books owned to read"'; then
                 if [[ "$first_owned" == false ]]; then
                     books_owned="$books_owned, "
                 fi
@@ -209,8 +199,7 @@ EOF
   "buckets": {
     "Books to consider": [$books_to_consider],
     "Books owned to read": [$books_owned]
-  },
-  "flatList": [$english_flat_list]
+  }
 }
 EOF
         log "Generated English export with ${#english_books[@]} books"
@@ -218,13 +207,13 @@ EOF
     
     # Generate Japanese export
     if [[ ${#japanese_books[@]} -gt 0 ]]; then
-        local japanese_flat_list=""
+        local japanese_books_list=""
         local first=true
         for book in "${japanese_books[@]}"; do
             if [[ "$first" == false ]]; then
-                japanese_flat_list="$japanese_flat_list, "
+                japanese_books_list="$japanese_books_list, "
             fi
-            japanese_flat_list="$japanese_flat_list$book"
+            japanese_books_list="$japanese_books_list$book"
             first=false
         done
         
@@ -238,9 +227,8 @@ EOF
     { "name": "Japanese books to consider", "id": "omnifocus:///project/bPvbY14zt9G" }
   ],
   "buckets": {
-    "Japanese books to consider": [$japanese_flat_list]
-  },
-  "flatList": [$japanese_flat_list]
+    "Japanese books to consider": [$japanese_books_list]
+  }
 }
 EOF
         log "Generated Japanese export with ${#japanese_books[@]} books"
