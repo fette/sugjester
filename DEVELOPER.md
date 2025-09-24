@@ -69,6 +69,7 @@
 2. **Export Pipeline**
    - `export-books.applescript` - Direct OmniFocus query
    - `export-books.sh` - Transform to JSON structure
+   - `sync-hugo-books.sh` - Cross-reference with Hugo blog reading history
    - `automate-export.sh` - Scheduling and Git integration
 
 3. **Output Structure**
@@ -110,8 +111,26 @@ The export system is designed to support intelligent recommendations:
 - **Unified context**: AI sees all books at once for better patterns
 - **Simple querying**: `data.buckets['Books owned to read']` - no complex merging
 
+## Hugo Blog Integration
+
+The system automatically imports your Hugo blog reading history to give the AI complete context:
+
+- **Hugo shelf path**: `/Users/fet/source/metalbat/metalbat-hugo/content/shelf`
+- **Auto-import**: Daily sync pulls Hugo blog data and adds "Books read" bucket
+- **Rich metadata**: Imports titles, authors, finish dates, tags, and ISBN data
+- **Complete context**: AI sees both what you want to read and what you've already read
+
+### How It Works
+1. `sync-hugo-books.sh` extracts finished books from Hugo YAML front matter
+2. Converts Hugo metadata to consistent JSON format
+3. Adds "Books read" bucket to existing OmniFocus buckets
+4. Provides AI with complete reading ecosystem for better recommendations
+5. Updates total book count to include read books
+
 ## Automation Schedule
 - **Daily export**: 9:00 AM via launchd
+- **OmniFocus export**: Extract current to-read lists  
+- **Hugo sync**: Import reading history and add "Books read" bucket
 - **Auto-commit**: Changes tracked in Git automatically
 - **Error handling**: Comprehensive logging to `data/export.log`
 
@@ -136,3 +155,9 @@ The export system is designed to support intelligent recommendations:
 - **Decision**: Remove redundant flatList from JSON exports
 - **Reasoning**: AI can easily flatten buckets if needed: `Object.values(data.buckets).flat()`
 - **Result**: Cleaner JSON, no data duplication, file size cut in half
+
+### Why Hugo Blog Integration?
+- **Date**: 2025-09-24
+- **Decision**: Add automatic import of Hugo blog reading history as "Books read" bucket
+- **Reasoning**: Give AI complete reading context without modifying to-read lists; enables better recommendations
+- **Result**: AI has full reading ecosystem view: to-consider + owned + already-read for intelligent suggestions

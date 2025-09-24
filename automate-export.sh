@@ -33,6 +33,17 @@ export_result=$?
 if [ $export_result -eq 0 ]; then
     log "Export completed successfully"
     
+    # Import Hugo reading history to provide complete context for AI recommendations
+    log "Running Hugo books sync..."
+    "$SCRIPT_DIR/sync-hugo-books.sh"
+    hugo_result=$?
+    
+    if [ $hugo_result -eq 0 ]; then
+        log "Hugo sync completed successfully"
+    else
+        log "Warning: Hugo sync failed with exit code: $hugo_result (continuing anyway)"
+    fi
+    
     # Check if files were created
     if [ -f "$DATA_DIR/english-books-to-consider.json" ] && [ -f "$DATA_DIR/japanese-books-to-consider.json" ]; then
         log "Both English and Japanese export files found"
