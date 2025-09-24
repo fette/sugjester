@@ -174,6 +174,28 @@ EOF
             first=false
         done
         
+        # Group books by bucket for better organization  
+        local books_to_consider=""
+        local books_owned=""
+        local first_consider=true
+        local first_owned=true
+        
+        for book in "${english_books[@]}"; do
+            if echo "$book" | grep -q '"Books to consider"'; then
+                if [[ "$first_consider" == false ]]; then
+                    books_to_consider="$books_to_consider, "
+                fi
+                books_to_consider="$books_to_consider$book"
+                first_consider=false
+            elif echo "$book" | grep -q '"Books owned to read"'; then
+                if [[ "$first_owned" == false ]]; then
+                    books_owned="$books_owned, "
+                fi
+                books_owned="$books_owned$book"
+                first_owned=false
+            fi
+        done
+
         # Create English JSON structure
         cat > "$DATA_DIR/english-books-to-consider.json" << EOF
 {
@@ -185,8 +207,8 @@ EOF
     { "name": "Books owned to read", "id": "omnifocus:///project/gipgWMqDMdb" }
   ],
   "buckets": {
-    "Books to consider": [$english_flat_list],
-    "Books owned to read": []
+    "Books to consider": [$books_to_consider],
+    "Books owned to read": [$books_owned]
   },
   "flatList": [$english_flat_list]
 }

@@ -49,6 +49,7 @@ on run
                     set projId to (id of proj) as string
                     if projId contains "gipgWMqDMdb" then
                         set output to output & "PROJECT_START|Books owned to read|english|gipgWMqDMdb" & linefeed
+                        set output to output & "DEBUG|Found project with ID: " & projId & linefeed
                         
                         repeat with tsk in flattened tasks of proj
                             if (completed of tsk) is false then
