@@ -47,8 +47,8 @@ clean_task_name() {
 # Function to escape JSON strings
 escape_json() {
     local str="$1"
-    # Escape backslashes, quotes, and newlines
-    str=$(echo "$str" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed 's/$/\\n/g' | tr -d '\n' | sed 's/\\n$//')
+    # Remove control characters and escape JSON special characters
+    str=$(printf '%s' "$str" | tr -d '\000-\037' | sed 's/\\/\\\\/g; s/"/\\"/g')
     echo "$str"
 }
 
