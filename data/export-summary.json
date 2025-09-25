@@ -1,0 +1,16 @@
+{
+  "exportDate": "2025-09-24T06:28:01.000Z",
+  "unified": {
+    "totalBooks": 230,
+    "filePath": "/Users/fet/source/sugjester/data/books-to-consider.json",
+    "languages": {
+      "english": 177,
+      "japanese": 53
+    }
+  },
+  "sourceProjects": {
+    "Books to consider": "omnifocus:///project/aCuCB0X3CYn",
+    "Books owned to read": "omnifocus:///project/gipgWMqDMdb", 
+    "Japanese books to consider": "omnifocus:///project/bPvbY14zt9G"
+  }
+}
